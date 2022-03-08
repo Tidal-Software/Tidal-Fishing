@@ -14,6 +14,7 @@ var config = {
     scene: {
         preload: preload,
         create: create,
+        update: update
     }
 };
 
@@ -33,21 +34,29 @@ var y = 300;
 function create () {
     //With phaser positioning is from center so 800/600 would be 400/300 to center
     this.add.image(400,300,'sky');
-    this.add.image(x, y, 'star');
-    const particles = this.add.particles('red');
+
+    const stars = this.physics.add.image(x, y, 'star');
+    const particles = this.add.particles('green');
 
     const emitter = particles.createEmitter({
         speed: 500,
         scale: { start: 1, end: 0 },
         blendMode: 'ADD'
     });
+
+    //Update on mouse Move
+    this.input.on('pointermove', function (pointer) {
+        emitter.setPosition(pointer.x, pointer.y);
+    });
+
 }
 
 //every frame
 function update ()
 {
-    x= this.input.mousePointer.x;
-    y = this.input.mousePointer.y;
+    x = x+5;
+    y=y+5;
+
 }
 
 var game = new Phaser.Game(config);
